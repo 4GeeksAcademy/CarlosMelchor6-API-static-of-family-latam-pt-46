@@ -19,20 +19,17 @@ jackson_family = FamilyStructure("Jackson")
 John = {
     "first_name": "John",
     "age": 33,
-    "last_name": jackson_family.last_name,
     "lucky_numbers": [7, 13, 22]
 }
 
 Jane = {
     "first_name": "Jane",
-    "last_name": jackson_family.last_name,
     "age": 35,
     "lucky_numbers": [10, 14, 3]
 }
 
 Jimmy = {
     "first_name": "Jimmy",
-    "last_name": jackson_family.last_name,
     "age": 5,
     "lucky_numbers": [1]
 }
@@ -55,10 +52,32 @@ def sitemap():
 
 
 @app.route('/members', methods=['GET'])
-def handle_hello():
+def get_list_family():
     members = jackson_family.get_all_members()
     return jsonify(members), 200
 
+@app.route('/members', methods=['POST'])
+def post_member():
+    member = request.json
+    print("añadido", member)
+    jackson_family.add_member(member)
+    return member, 200
+
+@app.route('/members/<int:id>', methods=['GET'])
+def get_only_member(id):
+    member = jackson_family.get_member(id)
+    if member["id"] == id:
+        return jsonify(member)
+    else:
+        return jsonify({"Error": "Miembro no encontrado"}), 404
+    
+@app.route('/members/<int:id>', methods=['DELETE'])
+def delete_only_member(id):
+    member = jackson_family.delete_member(id)
+    if member:
+        return jsonify({"done": True, "Delete_member": member}), 200
+    else:
+        return jsonify({"Error": "Miembro no encontrado"}), 404
 
 # This only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':

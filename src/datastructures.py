@@ -26,14 +26,17 @@ class FamilyStructure:
         return member
 
     def delete_member(self, id):
-        # You have to implement this method
-        # Loop the list and delete the member with the given id
-        pass
+        for member in self._members:
+            if member["id"] == id:
+                self._members.remove(member)
+                return member
+        return None
+
 
     def get_member(self, id):
-        # You have to implement this method
-        # Loop all the members and return the one with the given id
-        pass
+        return next((m for  m in self._members if m["id"] == id), None)
+
+
 
     # This method is done, it returns a list with all the family members
     def get_all_members(self):
