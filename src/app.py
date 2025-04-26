@@ -66,18 +66,16 @@ def post_member():
 @app.route('/members/<int:id>', methods=['GET'])
 def get_only_member(id):
     member = jackson_family.get_member(id)
-    if member["id"] == id:
-        return jsonify(member)
-    else:
+    if member is None:
         return jsonify({"Error": "Miembro no encontrado"}), 404
-    
+    return jsonify(member)
+
 @app.route('/members/<int:id>', methods=['DELETE'])
 def delete_only_member(id):
     member = jackson_family.delete_member(id)
-    if member:
-        return jsonify({"done": True, "Delete_member": member}), 200
-    else:
+    if member is None:
         return jsonify({"Error": "Miembro no encontrado"}), 404
+    return jsonify({"done": True, "Delete_member": member}), 200
 
 # This only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
